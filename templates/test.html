@@ -1,3 +1,5 @@
+{% load blog_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +8,22 @@
     <title>Document</title>
 </head>
 <body>
-    <p>title: {{post.title}}</p>
-    <p>content: {{post.content}}</p>
+    <p>Testing Page</p>
+    <p>test: </p>
+    <p> {% popularposts %} </p>
+
+    <!-- <p>{% post as totalposts %}</p> -->
+    <!-- {% for post in totalposts %}
+        <p>{{post}}</p>
+        <p>{{post.content}}</p>
+    {% endfor %}
+
+    {% for post in totalposts %}
+        <p>{{post.content | snippets:150}} </p>
+    {% endfor %} -->
+
+    <!-- <p>test: {% totalposts as tp %} </p>
+    <p>{{tp}}</p> -->
     
 </body>
 </html>
