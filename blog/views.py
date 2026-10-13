@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from blog.models import Post
+from blog.models import Post, Comment
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from blog.forms import CommentForm
+from django.contrib import messages
 
 
 def blog_view(request, **kwargs):
@@ -29,11 +31,21 @@ def blog_view(request, **kwargs):
     return render(request, 'blog/blog-home.html', context)
 
 def blog_single(request, pid):
+    if request.method == 'POST':
+        form= CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, "Your Form submited successfully !")
+        else:
+            messages.add_message(request, messages.ERROR, "your comment didn't submited !")
+
     posts= Post.objects.filter(status= 1)
     post= get_object_or_404(Post, pk= pid)
-    context= {'post':post}
+    comments= Comment.objects.filter(post= post.id, approved=True)
     # post= Post.objects.filter(published_date__lte= timezone.now())
     # post= Post.objects.order_by('-published_date')
+    form= CommentForm()
+    context= {'post':post, 'comments':comments, 'form':form}
     return render(request,"blog/blog-single.html", context)
 
 def blog_test(request):
